@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}House Phakphum - รับสร้างบ้านคุณภาพ ในราคาที่คุณจับต้องได้{% endblock %}
+
+{% block body_class %}homepage{% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+<section class="hero-mtech position-relative">
+    {% if user.is_authenticated %}
+    {% if user.is_staff or user.is_superuser %}
+    <!-- Admin quick tools bar -->
+    <div class="position-fixed bottom-0 end-0 m-3" style="z-index: 1050;">
+        <div class="d-flex flex-wrap gap-2 p-2 bg-primary-subtle rounded-3 shadow border border-primary-subtle">
+            <a href="/admin/" class="btn btn-outline-primary btn-sm bg-white shadow-sm"><i class="bi bi-speedometer2 me-1"></i> Admin</a>
+            <a href="{% url 'catalog:create' %}" class="btn btn-outline-primary btn-sm bg-white shadow-sm"><i class="bi bi-plus-circle me-1"></i> เพิ่มแบบบ้าน</a>
+            <a href="{% url 'quotes:list' %}" class="btn btn-outline-primary btn-sm bg-white shadow-sm"><i class="bi bi-file-earmark-text me-1"></i> ใบเสนอราคา</a>
+            <a href="{% url 'construction:list' %}" class="btn btn-outline-primary btn-sm bg-white shadow-sm"><i class="bi bi-building me-1"></i> โครงการก่อสร้าง</a>
+            <a href="{% url 'chat:inbox' %}" class="btn btn-outline-primary btn-sm bg-white shadow-sm"><i class="bi bi-chat-dots me-1"></i> ข้อความ</a>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    <!-- Static Background & Overlay -->
+    <div class="hero-slide">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel" data-bs-interval="5000"
+        style="position: relative; z-index: 10;">
+        <div class="carousel-inner h-100">
+            <div class="carousel-item active h-100">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <div class="hero-content text-center text-white px-3 animate-up">
+                        <h1 class="display-3 fw-bold mb-3">HOUSE PHAKPHUM</h1>
+                        <p class="lead fs-4 fw-light mb-0">รับสร้างบ้านคุณภาพ ในราคาที่คุณจับต้องได้</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item h-100">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <div class="hero-content text-center text-white px-3 animate-up">
+                        <h1 class="display-3 fw-bold mb-3">Professional Home Builder</h1>
+                        <p class="lead fs-4 fw-light mb-0">ออกแบบและก่อสร้างโดยทีมงานมืออาชีพ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container position-relative">
+    <div class="search-panel">
+        <form action="{% url 'catalog:list' %}" method="GET">
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-muted small fw-bold"><i class="bi bi-wallet2 me-1"></i>
+                        งบประมาณ</label>
+                    <select name="budget" class="form-select form-select-lg border-light bg-light">
+                        <option value="">ทุกช่วงราคา</option>
+                        <option value="3m">ไม่เกิน 3 ล้านบาท</option>
+                        <option value="3-5m">3 - 5 ล้านบาท</option>
+                        <option value="5-10m">5 - 10 ล้านบาท</option>
+                        <option value="10m+">10 ล้านบาทขึ้นไป</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-muted small fw-bold"><i class="bi bi-aspect-ratio me-1"></i>
+                        พื้นที่ใช้สอย</label>
+                    <select name="area" class="form-select form-select-lg border-light bg-light">
+                        <option value="">ทุกขนาด</option>
+                        <option value="s">น้อยกว่า 150 ตร.ม.</option>
+                        <option value="m">150 - 250 ตร.ม.</option>
+                        <option value="l">มากกว่า 250 ตร.ม.</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-muted small fw-bold"><i class="bi bi-house-door me-1"></i>
+                        สไตล์บ้าน</label>
+                    <select name="style" class="form-select form-select-lg border-light bg-light">
+                        <option value="">ทุกสไตล์</option>
+                        <option value="modern">Modern</option>
+                        <option value="nordic">Nordic</option>
+                        <option value="contemporary">Contemporary</option>
+                        <option value="luxury">Luxury</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-3 h-100">
+                        <i class="bi bi-search me-2"></i>ค้นหาทันที
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<section class="py-5 mt-4">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 hover-lift h-100">
+                    <div class="icon-box bg-blue-light text-primary mb-3 mx-auto">
+                        <i class="bi bi-patch-check-fill fs-2"></i>
+                    </div>
+                    <h5>รับประกันโครงสร้าง</h5>
+                    <p class="text-muted">มั่นใจได้ในความแข็งแรง ด้วยการรับประกันโครงสร้างยาวนานถึง 20 ปี</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 hover-lift h-100">
+                    <div class="icon-box bg-blue-light text-primary mb-3 mx-auto">
+                        <i class="bi bi-file-earmark-text-fill fs-2"></i>
+                    </div>
+                    <h5>งบไม่บานปลาย</h5>
+                    <p class="text-muted">ทำสัญญาชัดเจน ควบคุมงบประมาณได้ มี BOQ แสดงรายการละเอียด</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 hover-lift h-100">
+                    <div class="icon-box bg-blue-light text-primary mb-3 mx-auto">
+                        <i class="bi bi-clock-history fs-2"></i>
+                    </div>
+                    <h5>เสร็จตรงเวลา</h5>
+                    <p class="text-muted">มีระบบติดตามงานออนไลน์ อัปเดตความคืบหน้าให้คุณดูได้ทุกวัน</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light-gradient">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="badge bg-primary-subtle text-primary mb-2">Inspiration</span>
+                <h2 class="fw-bold mb-0">เลือกสไตล์ที่คุณชอบ</h2>
+            </div>
+            <a href="{% url 'catalog:list' %}" class="text-decoration-none fw-bold">ดูทั้งหมด <i
+                    class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'catalog:list' %}?style=modern"
+                    class="card style-card text-white border-0 overflow-hidden rounded-4 h-100">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=600" class="card-img"
+                        alt="Modern">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4 gradient-overlay">
+                        <h4 class="card-title fw-bold mb-0">Modern</h4>
+                        <p class="card-text small opacity-75">ทันสมัย เรียบง่าย</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'catalog:list' %}?style=nordic"
+                    class="card style-card text-white border-0 overflow-hidden rounded-4 h-100">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600" class="card-img"
+                        alt="Nordic">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4 gradient-overlay">
+                        <h4 class="card-title fw-bold mb-0">Nordic</h4>
+                        <p class="card-text small opacity-75">อบอุ่น สไตล์ยุโรป</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <a href="{% url 'catalog:list' %}?style=luxury"
+                    class="card style-card text-white border-0 overflow-hidden rounded-4 h-100">
+                    <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=800" class="card-img"
+                        alt="Luxury" style="object-position: center;">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4 gradient-overlay">
+                        <h4 class="card-title fw-bold mb-0">Luxury Series</h4>
+                        <p class="card-text small opacity-75">ที่สุดแห่งความหรูหรา และฟังก์ชันที่ครบครัน</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="featured-designs" class="py-5">
+    <div class="container py-lg-4">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-subtle text-primary mb-2">Recommended</span>
+            <h2 class="fw-bold display-6">แบบบ้านแนะนำสำหรับคุณ</h2>
+            <p class="text-muted">คัดสรรแบบบ้านยอดนิยม ที่ตอบโจทย์ทุกการอยู่อาศัย</p>
+        </div>
+
+        <div class="row g-4">
+            {% for design in designs|slice:":6" %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-card">
+                    <div class="position-relative">
+                        {% if design.cover_image %}
+                        <img src="{{ design.cover_image.url }}" class="card-img-top" alt="{{ design.title }}"
+                            style="height: 250px; object-fit: cover;">
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x300" class="card-img-top" alt="Placeholder">
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill">
+                                HP-{{ design.pk|stringformat:"03d" }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3">{{ design.title }}</h5>
+
+                        <div class="d-flex justify-content-between mb-3 text-muted small">
+                            <span><i class="bi bi-arrows-fullscreen me-1"></i> {{ design.area_sqm }} ตร.ม.</span>
+                            <span><i class="bi bi-door-closed me-1"></i> {{ design.bedrooms }} นอน</span>
+                            <span><i class="bi bi-droplet me-1"></i> {{ design.bathrooms }} น้ำ</span>
+                        </div>
+
+                        <hr class="opacity-10">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted d-block">ราคาเริ่มต้น</small>
+                                <span class="text-primary fw-bold fs-5">฿ {{ design.base_price|default:"0"|intcomma }}</span>
+                            </div>
+                            <a href="{% url 'designs:detail' design.pk %}"
+                                class="btn btn-outline-primary rounded-pill px-4">
+                                ดูรายละเอียด
+                            </a>
+                            {% if user.is_authenticated %}
+                            {% if user.is_staff or user.is_superuser %}
+                            <div class="ms-2 d-none d-md-flex gap-2">
+                                <a href="{% url 'designs:update' design.pk %}"
+                                   class="btn btn-warning btn-sm rounded-pill px-3">
+                                    <i class="bi bi-pencil-square me-1"></i> แก้ไข
+                                </a>
+                                <a href="{% url 'designs:delete' design.pk %}"
+                                   class="btn btn-danger btn-sm rounded-pill px-3">
+                                    <i class="bi bi-trash me-1"></i> ลบ
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="text-muted">
+                    <i class="bi bi-house-exclamation fs-1 d-block mb-3"></i>
+                    ยังไม่มีแบบบ้านแนะนำในขณะนี้
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'catalog:list' %}" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                ดูแบบบ้านทั้งหมด ({{ designs.count }})
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

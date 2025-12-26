@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}ระบบผู้ดูแล HOUSE PHAKPHUM | {{ title }}{% endblock %}
+
+{% block extrastyle %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/admin-custom.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" class="py-2 m-0">
+  <a href="{% url 'admin:index' %}" class="text-decoration-none">
+    <i class="bi bi-house-door-fill me-2"></i> ระบบผู้ดูแล HOUSE PHAKPHUM
+  </a>
+  <small class="d-block text-white-50">จัดการข้อมูลเว็บไซต์และงานโครงการ</small>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div class="admin-top-links">
+  <a href="{% url 'dashboard' %}" target="_blank">ไปหน้าเว็บไซต์</a>
+  <a href="{% url 'quotes:list' %}" target="_blank">จัดการใบเสนอราคา</a>
+  <a href="{% url 'construction:list' %}" target="_blank">โครงการก่อสร้าง</a>
+</div>
+{% endblock %}

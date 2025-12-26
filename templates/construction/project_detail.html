@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Project Detail{% endblock %}
+{% block content %}
+<h1>{{ project }}</h1>
+<dl class="row">
+    <dt class="col-sm-3">Owner</dt>
+    <dd class="col-sm-9">{{ project.owner.get_username }}</dd>
+    <dt class="col-sm-3">Start</dt>
+    <dd class="col-sm-9">{{ project.start_date|date:"M d, Y" }}</dd>
+    <dt class="col-sm-3">Expected End</dt>
+    <dd class="col-sm-9">{{ project.expected_end_date|date:"M d, Y" }}</dd>
+    <dt class="col-sm-3">Progress</dt>
+    <dd class="col-sm-9">{{ project.total_progress }}%</dd>
+</dl>
+{% if user.is_superuser %}
+    <a class="btn btn-secondary" href="{% url 'construction:update' project.pk %}">Edit Project</a>
+    <a class="btn btn-primary" href="{% url 'construction:progress-create' project.pk %}">Add Update</a>
+{% endif %}
+<hr class="my-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Progress Timeline</h2>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'chat:project' project.pk %}"><i class="bi bi-chat-dots me-1"></i> เปิดห้องแชทโครงการ</a>
+        {% if user.is_superuser %}
+            <a class="btn btn-primary" href="{% url 'construction:progress-create' project.pk %}"><i class="bi bi-plus-lg me-1"></i> เพิ่มอัปเดต</a>
+        {% endif %}
+    </div>
+}</div>
+<div class="list-group">
+    {% for update in project.updates.all %}
+        <div class="list-group-item">
+            <h5 class="mb-1">{{ update.stage_name }} <small class="text-muted">{{ update.update_date|date:"M d, Y" }}</small></h5>
+                        <p class="mb-2">{{ update.description }}</p>
+                        <div class="mt-2">
+                            <form class="d-flex gap-2" action="{% url 'chat:project' project.pk %}" method="get">
+                                <input type="text" class="form-control" placeholder="พิมพ์คำถามเกี่ยวกับอัปเดตนี้...">
+                                <button type="submit" class="btn btn-outline-secondary">ไปคุยในแชท</button>
+                            </form>
+                        </div>
+            {% if update.site_image %}
+                <img src="{{ update.site_image.url }}" alt="Site image" class="img-fluid">
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="list-group-item">No updates yet.</div>
+    {% endfor %}
+</div>
+{% endblock %}

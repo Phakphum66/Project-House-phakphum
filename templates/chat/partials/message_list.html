@@ -1,0 +1,8 @@
+<div id="chat-messages"
+     class="chat-messages"
+     hx-get="{% url 'chat:messages' conversation.pk %}"
+     hx-trigger="load, every 5s"
+     hx-target="#chat-messages"
+     hx-swap="outerHTML">
+    {% include "chat/partials/message_items.html" %}
+</div>

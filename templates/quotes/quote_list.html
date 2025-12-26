@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}รายการใบเสนอราคา{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">รายการใบเสนอราคา</h1>
+    {% if user.is_authenticated and not user.is_superuser %}
+        <a class="btn btn-primary" href="{% url 'quotes:create' %}">ขอใบเสนอราคาใหม่</a>
+    {% endif %}
+</div>
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th scope="col">แบบบ้าน</th>
+            <th scope="col">สถานะ</th>
+            <th scope="col">ราคา</th>
+            <th scope="col">วันที่ขอ</th>
+            <th scope="col" class="text-end">การจัดการ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for quote in quotes %}
+            <tr>
+                <td>
+                    <div class="fw-semibold">{{ quote.reference_name }}</div>
+                    <div class="text-muted small">รหัส {{ quote.reference_code }}</div>
+                    {% if quote.is_catalog_source %}
+                        <span class="badge bg-primary-subtle text-primary mt-1">แบบบ้านแค็ตตาล็อก</span>
+                    {% else %}
+                        <span class="badge bg-secondary-subtle text-secondary mt-1">แบบบ้านส่วนตัว</span>
+                    {% endif %}
+                </td>
+                <td>{{ quote.get_status_display }}</td>
+                <td>
+                    {% if quote.price %}
+                        {{ quote.price|floatformat:2 }} บาท
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ quote.created_at|date:"d M Y" }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'quotes:detail' quote.pk %}">ดูใบเสนอราคา</a>
+                    {% if user.is_superuser %}
+                        <a class="btn btn-sm btn-outline-primary ms-1" href="{% url 'quotes:update' quote.pk %}">แก้ไข</a>
+                        <form method="post" action="{% url 'quotes:delete' quote.pk %}" class="d-inline ms-1" onsubmit="return confirm('คุณต้องการลบใบเสนอราคานี้หรือไม่?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">ลบ</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">ยังไม่มีใบเสนอราคา</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

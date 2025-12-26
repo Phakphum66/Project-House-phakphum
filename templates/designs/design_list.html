@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Designs{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Designs</h1>
+    <a class="btn btn-primary" href="{% url 'designs:create' %}">New Design</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Created</th>
+            <th>Owner</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for design in designs %}
+            <tr>
+                <td><a href="{% url 'designs:detail' design.pk %}">{{ design.title }}</a></td>
+                <td>{{ design.created_at|date:"M d, Y" }}</td>
+                <td>{{ design.owner.get_username }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'designs:update' design.pk %}">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'designs:delete' design.pk %}">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4">No designs found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

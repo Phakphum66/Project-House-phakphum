@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}House Phakphum - บริษัทรับสร้างบ้าน | รับเหมาก่อสร้าง{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+
+
+    {% block nav %}
+    <nav class="navbar navbar-expand-lg navbar-mtech" id="mainNavbar">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                <i class="bi bi-house-door-fill me-2"></i>HOUSE PHAKPHUM
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMain">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">หน้าแรก</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">เกี่ยวกับเรา</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'catalog:list' %}">แบบบ้าน</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'construction:list' %}">ผลงานก่อสร้าง</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i> {{ user.first_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                            <li class="dropdown-header text-muted">บัญชีของฉัน</li>
+                            <li><a class="dropdown-item" href="{% url 'designs:list' %}"><i class="bi bi-collection me-2"></i>แบบบ้านของฉัน</a></li>
+                            <li><a class="dropdown-item" href="{% url 'designs:create' %}"><i class="bi bi-cloud-upload me-2"></i>แนบแบบบ้านของฉัน</a></li>
+                            <li><a class="dropdown-item" href="{% url 'quotes:list' %}">ใบเสนอราคา</a></li>
+                            <li><a class="dropdown-item" href="{% url 'quotes:create' %}"><i class="bi bi-file-earmark-plus me-2"></i>ขอใบเสนอราคา (จากแบบของฉัน)</a></li>
+                            <li><a class="dropdown-item" href="{% url 'construction:list' %}">ติดตามงาน</a></li>
+                            {% if user.is_staff %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-primary fw-bold" href="{% url 'dashboard' %}">Admin
+                                    Panel</a></li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="post" action="{% url 'accounts:logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger w-100 rounded-3">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item ms-lg-3">
+                        <a class="nav-link btn-cta" href="{% url 'contact' %}">
+                            <i class="bi bi-chat-dots me-1"></i> ติดต่อเรา
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    <main>
+        {% if messages %}
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050; margin-top: 100px;">
+            {% for message in messages %}
+            <div class="toast show align-items-center text-bg-{{ message.tags }} border-0 mb-2 shadow-lg" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">{{ message }}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-mtech pt-5 pb-3 mt-auto">
+        <div class="container">
+            <div class="row g-4 justify-content-between">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold mb-3 text-white">
+                        <i class="bi bi-house-door-fill me-2 text-primary"></i>HOUSE PHAKPHUM
+                    </h5>
+                    <p class="text-light opacity-75 small">
+                        เราคือบริษัทรับสร้างบ้านมืออาชีพ ที่มุ่งมั่นสร้างบ้านในฝันของคุณให้เป็นจริง
+                        ด้วยทีมงานสถาปนิกและวิศวกรมากประสบการณ์ ใส่ใจทุกรายละเอียด
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-line"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">เมนูหลัก</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'dashboard' %}"
+                                class="text-light opacity-75 text-decoration-none">หน้าแรก</a></li>
+                        <li class="mb-2"><a href="{% url 'about' %}"
+                                class="text-light opacity-75 text-decoration-none">เกี่ยวกับเรา</a></li>
+                        <li class="mb-2"><a href="{% url 'catalog:list' %}"
+                                class="text-light opacity-75 text-decoration-none">แบบบ้าน</a></li>
+                        <li class="mb-2"><a href="{% url 'construction:list' %}"
+                                class="text-light opacity-75 text-decoration-none">ผลงานของเรา</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">ติดต่อเรา</h6>
+                    <ul class="list-unstyled small text-light opacity-75">
+                        <li class="mb-2"><i class="bi bi-telephone me-2 text-primary"></i> 081-234-5678</li>
+                        <li class="mb-2"><i class="bi bi-envelope me-2 text-primary"></i> contact@housephakphum.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-light opacity-10 mt-4 mb-3">
+            <div class="row align-items-center small text-light opacity-75">
+                <div class="col-md-6 text-center text-md-start">
+                    &copy; 2025 House Phakphum Construction Co., Ltd.
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-light text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>

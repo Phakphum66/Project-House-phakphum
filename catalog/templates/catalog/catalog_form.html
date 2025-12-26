@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}เพิ่มแบบบ้านในแค็ตตาล็อก{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="h3 mb-4">เพิ่มแบบบ้านในแค็ตตาล็อก</h1>
+        {% if prefill_source %}
+            <div class="alert alert-info" role="alert">
+                กำลังดึงข้อมูลจาก "{{ prefill_source.title }}" – ตรวจสอบและปรับรายละเอียดก่อนบันทึก
+            </div>
+        {% endif %}
+        {% if design_sources %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h6 text-primary">นำเข้าจากแบบบ้านที่เสร็จแล้ว</h2>
+                    <p class="text-muted small mb-3">เลือกแบบบ้านที่ลูกค้าส่งหรือสร้างเสร็จเพื่อเติมชื่อและคำอธิบายอัตโนมัติ</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for design in design_sources %}
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'catalog:create' %}?source_design={{ design.pk }}">{{ design.title }}</a>
+                        {% empty %}
+                            <span class="text-muted small">ยังไม่มีแบบบ้านจากลูกค้า</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="card border-0 shadow-sm">
+            <div class="card-body vstack gap-3">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+                    </div>
+                {% endif %}
+                {% for field in form %}
+                    <div>
+                        {% if field.widget_type == 'checkbox' %}
+                            <div class="form-check form-switch">
+                                {{ field }}
+                                <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            </div>
+                        {% else %}
+                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <a class="btn btn-outline-secondary" href="{% url 'catalog:list' %}">ยกเลิก</a>
+                <button class="btn btn-primary" type="submit">บันทึกลงแค็ตตาล็อก</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

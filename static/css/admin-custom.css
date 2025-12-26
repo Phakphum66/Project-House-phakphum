@@ -1,0 +1,79 @@
+/* Admin theme for HOUSE PHAKPHUM */
+:root {
+  --brand-primary: #0d6efd; /* Bootstrap primary */
+  --brand-dark: #0a4aa8; /* darker variant */
+  --brand-bg: #0d6efd; /* header bg */
+  --brand-text-on: #ffffff;
+}
+
+/* Thai-friendly font across admin */
+html, body, input, textarea, select, button {
+  font-family: 'Prompt', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans Thai", "Noto Sans", sans-serif;
+}
+
+/* Override header bar */
+#header {
+  background: var(--brand-bg);
+  color: var(--brand-text-on);
+  border-bottom: 0;
+}
+#header a:link, #header a:visited {
+  color: var(--brand-text-on);
+}
+#branding h1, #branding h1 a {
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Module headers, buttons */
+.module h2, .module caption, .inline-group h2 {
+  background: #f8fbff;
+  color: #0a2b55;
+  border-bottom: 1px solid #e6eef9;
+}
+.button, input[type="submit"], .submit-row input, .deletelink {
+  border-radius: 999px;
+}
+.button.default, .submit-row input.default {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+.button.default:hover, .submit-row input.default:hover {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+/* Breadcrumbs */
+#breadcrumbs {
+  background: #eef5ff;
+  border-bottom: 1px solid #dce9ff;
+}
+
+/* Tables */
+#changelist table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+#changelist .paginator {
+  border-top: 0;
+}
+
+/* Login page */
+.login #container {
+  border-radius: 16px;
+}
+
+/* Minor spacing tweaks */
+#content-main .module {
+  border-radius: 12px;
+}
+
+/* Top quick links */
+.admin-top-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.admin-top-links a {
+  color: var(--brand-text-on);
+}

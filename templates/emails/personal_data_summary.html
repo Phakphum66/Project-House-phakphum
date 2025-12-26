@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Your Personal Data Summary</title>
+</head>
+<body style="margin:0;padding:0;background-color:#eef3fb;font-family:'Prompt','Segoe UI',sans-serif;color:#1f2937;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#eef3fb;padding:24px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 16px 40px rgba(13,71,161,0.15);">
+                    <tr>
+                        <td style="background:linear-gradient(135deg,rgba(13,71,161,0.9),rgba(13,71,161,0.7));padding:32px 24px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="left" style="color:#ffffff;">
+                                        <div style="display:flex;align-items:center;gap:16px;">
+                                            <div style="width:64px;height:64px;border-radius:16px;background-color:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+                                                <img src="{{ logo_url }}" alt="House Phakphum" style="max-width:48px;max-height:48px;display:block;">
+                                            </div>
+                                            <div>
+                                                <h1 style="margin:0;font-size:24px;font-weight:700;">Your Personal Data Summary</h1>
+                                                <p style="margin:8px 0 0;font-size:14px;opacity:0.85;">Generated on {{ generated_at|date:"d M Y H:i" }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:32px 24px 16px;">
+                            <p style="margin:0 0 16px;font-size:16px;">สวัสดี {{ full_name }},</p>
+                            <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">ตามคำร้องของคุณ เราได้จัดทำสรุปข้อมูลส่วนบุคคลที่จัดเก็บไว้ในระบบ House Phakphum เพื่อให้คุณตรวจสอบความถูกต้องและเก็บบันทึกไว้สำหรับการอ้างอิง</p>
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:1px solid rgba(13,71,161,0.15);border-radius:12px;overflow:hidden;">
+                                <tbody>
+                                    <tr style="background-color:#f1f6ff;">
+                                        <td style="padding:12px 16px;font-weight:600;width:40%;color:#0d47a1;">ชื่อผู้ใช้</td>
+                                        <td style="padding:12px 16px;">{{ username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">ชื่อ - สกุล</td>
+                                        <td style="padding:12px 16px;">{{ full_name }}</td>
+                                    </tr>
+                                    <tr style="background-color:#f1f6ff;">
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">อีเมล</td>
+                                        <td style="padding:12px 16px;">{{ email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">เบอร์โทรศัพท์</td>
+                                        <td style="padding:12px 16px;">{{ phone }}</td>
+                                    </tr>
+                                    <tr style="background-color:#f1f6ff;">
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">ที่อยู่</td>
+                                        <td style="padding:12px 16px;">{{ address }}</td>
+                                    </tr>
+                                    {% if national_id %}
+                                    <tr>
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">หมายเลขประจำตัวประชาชน</td>
+                                        <td style="padding:12px 16px;">{{ national_id }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if tax_id %}
+                                    <tr style="background-color:#f1f6ff;">
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">เลขประจำตัวผู้เสียภาษี</td>
+                                        <td style="padding:12px 16px;">{{ tax_id }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td style="padding:12px 16px;font-weight:600;color:#0d47a1;">สรุปรายการ</td>
+                                        <td style="padding:12px 16px;">{{ summary_line }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top:24px;border:1px solid rgba(13,71,161,0.15);border-radius:12px;padding:16px;background-color:#f8fbff;">
+                                <p style="margin:0;font-size:14px;color:#0d47a1;font-weight:600;">ข้อมูลโครงการของคุณ</p>
+                                <ul style="margin:12px 0 0 18px;padding:0;font-size:14px;color:#1f2937;">
+                                    <li>แบบบ้านทั้งหมด: {{ design_count }} รายการ</li>
+                                    <li>ใบเสนอราคาที่เกี่ยวข้อง: {{ quote_count }} รายการ</li>
+                                    <li>โครงการก่อสร้างที่ติดตามอยู่: {{ project_count }} โครงการ</li>
+                                </ul>
+                            </div>
+                            <div style="text-align:center;margin:32px 0 16px;">
+                                <a href="{{ dashboard_url }}" style="display:inline-block;padding:14px 28px;background-color:#0d47a1;color:#ffffff;text-decoration:none;border-radius:999px;font-weight:600;">Login to Edit Profile</a>
+                            </div>
+                            <p style="margin:0 0 12px;font-size:14px;color:#4b5563;">หากคุณต้องการปรับปรุงข้อมูลหรือมีคำถามเพิ่มเติม โปรดเข้าสู่ระบบและอัปเดตข้อมูลของคุณได้ทุกเมื่อ</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:24px;background-color:#f1f6ff;border-top:1px solid rgba(13,71,161,0.12);">
+                            <p style="margin:0;font-size:12px;color:#0d47a1;font-weight:600;">Privacy Notice</p>
+                            <p style="margin:8px 0 0;font-size:12px;color:#4b5563;line-height:1.6;">This email contains personal information. Please do not forward this to others. If you did not request this, please contact us immediately.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

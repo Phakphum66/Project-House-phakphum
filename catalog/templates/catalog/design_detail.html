@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ design.name }} - แบบบ้าน{% endblock %}
+{% block content %}
+<div class="row g-4">
+    {# Add images section #}
+    <div class="col-12 col-lg-7">
+        {% if design.cover_image or design.floor_plan %}
+        <div class="row g-3">
+            {% if design.cover_image %}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <img src="{{ design.cover_image.url }}" alt="ภาพหน้าปก {{ design.name }}" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
+                </div>
+            </div>
+            {% endif %}
+            {% if design.floor_plan %}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0 text-muted"><i class="bi bi-diagram-3 me-2"></i>แปลนบ้าน</h6>
+                    </div>
+                    <img src="{{ design.floor_plan.url }}" alt="แปลนบ้าน {{ design.name }}" class="img-fluid w-100" style="height: 350px; object-fit: cover;">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm position-sticky" style="top:6rem;">
+            <div class="card-body">
+                <span class="badge bg-primary-subtle text-primary mb-2">พร้อมสร้างทันที</span>
+                <h1 class="h3 text-primary">{{ design.name }}</h1>
+                <p class="text-muted">{{ design.concept }}</p>
+                <div class="d-flex flex-wrap gap-3 my-4">
+                    <div class="spec-chip">
+                        <span class="spec-label">พื้นที่ใช้สอย</span>
+                        <span class="spec-value">{{ design.area_sqm }} ตร.ม.</span>
+                    </div>
+                    <div class="spec-chip">
+                        <span class="spec-label">ห้องนอน</span>
+                        <span class="spec-value">{{ design.bedrooms }} ห้อง</span>
+                    </div>
+                    <div class="spec-chip">
+                        <span class="spec-label">ห้องน้ำ</span>
+                        <span class="spec-value">{{ design.bathrooms }} ห้อง</span>
+                    </div>
+                    <div class="spec-chip">
+                        <span class="spec-label">ขนาดอาคาร</span>
+                        <span class="spec-value">{{ design.dimensions }}</span>
+                    </div>
+                </div>
+                <div class="bg-light rounded-4 p-4 mb-4">
+                    <div class="text-muted small">ราคาเริ่มต้น</div>
+                    <div class="display-6 fw-semibold text-primary">{{ design.base_price|floatformat:0 }} บาท</div>
+                    <div class="text-muted small">รวมงานโครงสร้างตามมาตรฐานบริษัท</div>
+                </div>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'catalog:get_quote' slug=design.slug %}" class="d-grid gap-3">
+                        {% csrf_token %}
+                        <button class="btn btn-primary btn-lg" type="submit">ขอใบเสนอราคาสำหรับแบบนี้</button>
+                        <a class="btn btn-outline-primary" href="{% url 'quotes:list' %}">ไปยังใบเสนอราคาของฉัน</a>
+                    </form>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        กรุณา<a class="alert-link" href="{% url 'accounts:login' %}?next={{ request.path }}">เข้าสู่ระบบ</a> หรือ<a class="alert-link" href="{% url 'accounts:register' %}?next={{ request.path }}">สมัครสมาชิก</a> เพื่อขอใบเสนอราคาและบันทึกแบบบ้านที่คุณชื่นชอบ
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}?next={{ request.path }}">เข้าสู่ระบบเพื่อขอใบเสนอราคา</a>
+                        <a class="btn btn-outline-primary" href="{% url 'accounts:register' %}?next={{ request.path }}">สมัครสมาชิกใหม่</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

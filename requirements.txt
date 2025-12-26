@@ -1,0 +1,4 @@
+Django>=5.0
+Pillow>=10.0
+WeasyPrint>=62.0
+xhtml2pdf>=0.2.11

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Construction Projects{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Construction Projects</h1>
+    {% if user.is_superuser %}
+        <a class="btn btn-primary" href="{% url 'construction:create' %}">New Project</a>
+    {% endif %}
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Owner</th>
+            <th>Start</th>
+            <th>Expected End</th>
+            <th>Progress</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+            <tr>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary rounded-pill"
+                       href="{% url 'construction:detail' project.pk %}">{{ project }}</a>
+                </td>
+                <td>{{ project.owner.get_username }}</td>
+                <td>{{ project.start_date|date:"M d, Y" }}</td>
+                <td>{{ project.expected_end_date|date:"M d, Y" }}</td>
+                <td>{{ project.total_progress }}%</td>
+                <td class="text-end">
+                    {% if user.is_superuser %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'construction:update' project.pk %}">Edit</a>
+                        <a class="btn btn-sm btn-outline-danger ms-2" href="{% url 'construction:delete' project.pk %}">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="6">No projects found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}เข้าสู่ระบบ{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block nav %}{% endblock %}
+{% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    .auth-page {
+        background: #ffffff;
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    .auth-wrapper {
+        min-height: 100vh;
+    }
+
+    .auth-visual {
+        position: relative;
+        background: linear-gradient(rgba(0, 128, 96, 0.55), rgba(0, 128, 96, 0.55)), url('{% static "img/login-hero.jpg" %}') center/cover no-repeat;
+    }
+
+    .auth-visual::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(0, 128, 96, 0.6), rgba(118, 214, 170, 0.35));
+    }
+
+    .auth-message {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+        color: #ffffff;
+    }
+
+    .auth-message h2 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .auth-message p {
+        max-width: 26rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    .auth-form-wrapper {
+        min-height: 100vh;
+        background: #ffffff;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 420px;
+        background: #ffffff;
+        border-radius: 1.25rem;
+        box-shadow: 0 24px 40px rgba(0, 128, 96, 0.12);
+        padding: 2.5rem 2rem;
+    }
+
+    .auth-card h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0c7c5a; /* deep green */
+    }
+
+    .auth-card p {
+        color: #5f6b64;
+    }
+
+    .form-floating > .form-control {
+        border-radius: 0.75rem;
+        border: 1px solid #cfd9cf;
+        padding: 1rem 1rem;
+        height: auto;
+        min-height: 56px;
+        background-color: #f8fffb;
+        box-shadow: inset 0 1px 2px rgba(0, 128, 96, 0.06);
+    }
+
+    .form-floating > label {
+        padding: 0.75rem 1rem;
+        color: #5f6b64;
+    }
+
+    .form-control:focus {
+        border-color: #58c29b;
+        box-shadow: 0 0 0 0.25rem rgba(0, 128, 96, 0.2);
+    }
+
+    .auth-card .btn-primary {
+        background: linear-gradient(135deg, #0c7c5a, #12a57a);
+        border: none;
+        font-weight: 600;
+        padding: 0.85rem 1rem;
+        border-radius: 0.9rem;
+        letter-spacing: 0.02em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 18px 24px rgba(0, 128, 96, 0.22);
+    }
+
+    .auth-card .btn-primary:hover,
+    .auth-card .btn-primary:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 32px rgba(0, 128, 96, 0.28);
+        background: linear-gradient(135deg, #0a6a4d, #10966f);
+    }
+
+    .auth-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .auth-meta a {
+        color: #0c7c5a;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-meta a:hover {
+        text-decoration: underline;
+    }
+
+    .auth-footer {
+        font-size: 0.95rem;
+        color: #607d8b;
+    }
+
+    .auth-footer a {
+        color: #0c7c5a;
+        font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .auth-alert {
+        border-radius: 0.85rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .auth-card {
+            box-shadow: none;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .auth-card {
+            max-width: 100%;
+            padding: 2.25rem 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .auth-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="row g-0">
+        <div class="col-lg-6 d-none d-lg-block auth-visual">
+            <div class="auth-message">
+                <h2>สร้างบ้านในฝันไปกับเรา</h2>
+                <p>เข้าถึงแบบบ้าน ใบเสนอราคา และข้อมูลความคืบหน้าการก่อสร้างแบบเรียลไทม์ที่ออกแบบเพื่อคุณ</p>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="auth-form-wrapper d-flex align-items-center justify-content-center py-5">
+                <div class="auth-card">
+                    <div class="mb-4">
+                            <h1 class="mb-2">เข้าสู่ระบบบัญชีของคุณ</h1>
+                        <p class="mb-0">เข้าสู่ระบบเพื่อจัดการแบบบ้าน ใบเสนอราคา และความคืบหน้าการก่อสร้างของคุณ</p>
+                    </div>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger auth-alert" role="alert">
+                                {{ form.non_field_errors|join:" " }}
+                            </div>
+                        {% endif %}
+                        <div class="form-floating mb-3">
+                            <input type="text" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}" class="form-control{% if form.username.errors %} is-invalid{% endif %}" id="{{ form.username.id_for_label }}" placeholder="อีเมลหรือชื่อผู้ใช้" autocomplete="username" required>
+                            <label for="{{ form.username.id_for_label }}">อีเมลหรือชื่อผู้ใช้</label>
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.username.errors|join:" " }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" name="{{ form.password.html_name }}" class="form-control{% if form.password.errors %} is-invalid{% endif %}" id="{{ form.password.id_for_label }}" placeholder="รหัสผ่าน" autocomplete="current-password" required>
+                            <label for="{{ form.password.id_for_label }}">รหัสผ่าน</label>
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.password.errors|join:" " }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="auth-meta mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="remember-me" name="remember_me">
+                                <label class="form-check-label" for="remember-me">
+                                    จดจำฉันไว้ในระบบ
+                                </label>
+                            </div>
+                            <a href="#">ลืมรหัสผ่าน?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">เข้าสู่ระบบ</button>
+                    </form>
+                    <div class="auth-footer mt-4 text-center">
+                        ยังไม่มีบัญชีใช่หรือไม่? <a href="{% url 'accounts:register' %}">สมัครสมาชิก</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

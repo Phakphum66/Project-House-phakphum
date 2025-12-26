@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Request Quote{% endblock %}
+{% block content %}
+<h1>Request Quote</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Submit Request</button>
+    <a class="btn btn-secondary" href="{% url 'quotes:list' %}">Cancel</a>
+</form>
+{% endblock %}

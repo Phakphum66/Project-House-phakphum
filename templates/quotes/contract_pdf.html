@@ -1,0 +1,274 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm 2.5cm 2cm;
+        }
+
+        body {
+            font-family: '__BODY_FONT__', sans-serif;
+            color: #1f2933;
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-mark {
+            font-size: 24pt;
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 20pt;
+            margin: 0;
+            color: #0d47a1;
+            letter-spacing: 0.5pt;
+        }
+
+        h2 {
+            font-size: 14pt;
+            margin: 0 0 0.5rem 0;
+            color: #0d47a1;
+        }
+
+        .contract-meta {
+            margin-top: 1rem;
+            font-size: 11pt;
+        }
+
+        .section {
+            margin-top: 1.8rem;
+        }
+
+        .section-title {
+            font-size: 13pt;
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 0.6rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            padding: 0.35rem 0;
+            vertical-align: top;
+        }
+
+        .clauses {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .clauses li {
+            margin-bottom: 0.8rem;
+        }
+
+        .clause-label {
+            font-weight: 600;
+            color: #0d47a1;
+            margin-right: 0.4rem;
+        }
+
+        .installment-table th,
+        .installment-table td {
+            border: 1px solid #d0d7de;
+            padding: 0.5rem 0.6rem;
+            text-align: left;
+        }
+
+        .installment-table th {
+            background-color: #e3f2fd;
+            font-weight: 600;
+        }
+
+        .signature-area {
+            margin-top: 2.5rem;
+            width: 100%;
+        }
+
+        .signature-table {
+            width: 100%;
+            border-spacing: 1.2rem 0;
+        }
+
+        .signature-block {
+            width: 50%;
+        }
+
+        .signature-line {
+            margin-top: 2.5rem;
+            border-top: 1px solid #1f2933;
+            padding-top: 0.4rem;
+            text-align: center;
+        }
+
+        .muted {
+            color: #546e7a;
+        }
+
+        .two-column {
+            width: 100%;
+        }
+
+        .two-column-table {
+            width: 100%;
+        }
+
+        .two-column-table td {
+            vertical-align: top;
+            width: 50%;
+        }
+
+        .spacer {
+            margin-top: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand-mark">{{ company.name }}</div>
+        <h1>สัญญาการก่อสร้างบ้าน</h1>
+        <div class="contract-meta">
+            เลขที่สัญญา: CT-{{ quote.id|stringformat:"05d" }}<br>
+            วันที่จัดทำ: {{ issued_date|date:"d F Y" }}
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="section-title">ข้อมูลคู่สัญญา</div>
+        <table class="info-table">
+            <tr>
+                <td style="width: 20%; font-weight: 600;">ผู้ว่าจ้าง:</td>
+                <td>{{ client.get_full_name|default:client.username }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">ที่อยู่:</td>
+                <td>{{ client_contact.address|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">โทรศัพท์:</td>
+                <td>{{ client_contact.phone|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">ผู้รับจ้าง:</td>
+                <td>{{ company.name }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">ที่อยู่สำนักงาน:</td>
+                <td>{{ company.address }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">ช่องทางติดต่อ:</td>
+                <td>โทร. {{ company.phone }} | อีเมล {{ company.email }}</td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="section">
+        <div class="section-title">รายละเอียดโครงการ</div>
+        <div class="two-column">
+            <table class="two-column-table">
+                <tr>
+                    <td>
+                        <p><strong>แบบบ้าน:</strong> {{ design_title }}</p>
+                        <p class="muted">{{ design_description|default:"ไม่มีรายละเอียดเพิ่มเติม" }}</p>
+                    </td>
+                    <td>
+                        <p><strong>รหัสแบบบ้าน:</strong> {{ design_code }}</p>
+                        <p><strong>ผู้ออกแบบ:</strong> {{ designer_name }}</p>
+                        {% if is_catalog_design %}
+                            <p class="muted spacer">แบบบ้านจากแค็ตตาล็อก Project House</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p><strong>มูลค่าสัญญารวม:</strong>
+            {% if has_price %}
+                {{ total_price|floatformat:2|intcomma }} บาท ({{ total_price|floatformat:2 }} THB)
+            {% else %}
+                รอตกลงมูลค่า (TBC)
+            {% endif %}
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="section-title">ตารางการชำระเงิน</div>
+        <table class="installment-table">
+            <thead>
+                <tr>
+                    <th>งวด</th>
+                    <th>สัดส่วน</th>
+                    <th>จำนวนเงิน</th>
+                    <th>เงื่อนไขการชำระ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for installment in installments %}
+                    <tr>
+                        <td>{{ installment.label }}</td>
+                        <td>{{ installment.percentage_display }}</td>
+                        <td>
+                            {% if installment.amount is not None %}
+                                {{ installment.amount|floatformat:2|intcomma }} บาท
+                            {% else %}
+                                รอตกลง
+                            {% endif %}
+                        </td>
+                        <td>{{ installment.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <div class="section-title">ข้อกำหนดและเงื่อนไข</div>
+        <ol class="clauses">
+            <li><span class="clause-label">ข้อ 1 :</span>ผู้รับจ้างตกลงดำเนินการก่อสร้างตามแบบแปลนที่แนบท้ายสัญญาให้แล้วเสร็จภายในระยะเวลาที่กำหนด</li>
+            <li><span class="clause-label">ข้อ 2 :</span>ผู้ว่าจ้างตกลงชำระเงินตามจำนวนและตามกำหนดเวลาที่ระบุในตารางการชำระเงินทุกประการ</li>
+            <li><span class="clause-label">ข้อ 3 :</span>การเปลี่ยนแปลงแบบก่อสร้างหรือวัสดุจะต้องได้รับความเห็นชอบเป็นลายลักษณ์อักษรจากทั้งสองฝ่าย</li>
+            <li><span class="clause-label">ข้อ 4 :</span>ทั้งสองฝ่ายตกลงร่วมกันตรวจรับงานในแต่ละงวด และเมื่อไม่มีข้อโต้แย้งถือว่าได้รับมอบงานแล้ว</li>
+            <li><span class="clause-label">ข้อ 5 :</span>ในกรณีเกิดเหตุสุดวิสัย ทั้งสองฝ่ายจะเจรจาหาข้อยุติอย่างเป็นธรรม โดยจัดทำบันทึกข้อตกลงเพิ่มเติม</li>
+        </ol>
+    </section>
+
+    <section class="section">
+        <div class="section-title">พื้นที่ลงนาม</div>
+        <div class="signature-area">
+            <table class="signature-table">
+                <tr>
+                    <td class="signature-block">
+                        <div class="signature-line">ลงชื่อ ............................................................ ผู้ว่าจ้าง</div>
+                        <div class="signature-line">( {{ client.get_full_name|default:client.username }} )</div>
+                        <div class="signature-line">วันที่ ............................................................</div>
+                    </td>
+                    <td class="signature-block">
+                        <div class="signature-line">ลงชื่อ ............................................................ ผู้รับจ้าง</div>
+                        <div class="signature-line">( ผู้มีอำนาจลงนาม {{ company.name }} )</div>
+                        <div class="signature-line">วันที่ ............................................................</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">ภาคผนวก</div>
+        <p class="muted">แนบ: แบบแปลนบ้าน รายการวัสดุ และเอกสารประกอบอื่น ๆ (จัดเตรียมโดยผู้ว่าจ้าง/ผู้รับจ้างตามที่ตกลง)</p>
+    </section>
+</body>
+</html>

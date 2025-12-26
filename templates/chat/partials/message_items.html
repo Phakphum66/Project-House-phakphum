@@ -1,0 +1,27 @@
+{% if messages %}
+    {% for message in messages %}
+        {% if message.sender_id == request.user.id %}
+            <div class="chat-message chat-message-me">
+                <div class="chat-bubble">
+                    <small class="d-block text-dark mb-1">
+                        {{ message.sender.get_full_name|default:message.sender.username }} • ผู้ใช้
+                    </small>
+                    <p class="mb-1">{{ message.content|linebreaksbr }}</p>
+                    <small class="text-white-50">{{ message.timestamp|date:"d M Y H:i" }}</small>
+                </div>
+            </div>
+        {% else %}
+            <div class="chat-message">
+                <div class="chat-bubble chat-bubble-admin">
+                    <small class="d-block text-muted mb-1">
+                        {{ message.sender.get_full_name|default:message.sender.username }}{% if message.sender.is_staff %} • ผู้ดูแล{% else %} • ลูกค้า{% endif %}
+                    </small>
+                    <p class="mb-1">{{ message.content|linebreaksbr }}</p>
+                    <small class="text-muted">{{ message.timestamp|date:"d M Y H:i" }}</small>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div class="text-center text-muted py-3">ยังไม่มีข้อความ เริ่มต้นสนทนาได้เลย</div>
+{% endif %}

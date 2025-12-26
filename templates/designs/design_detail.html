@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Design Detail{% endblock %}
+{% block content %}
+<h1>{{ design.title }}</h1>
+<p>{{ design.description }}</p>
+<div class="mb-3">
+    <strong>Owner:</strong> {{ design.owner.get_username }}
+</div>
+<div class="row g-4">
+    {% if design.cover_image %}
+        <div class="col-md-6">
+            <img src="{{ design.cover_image.url }}" class="img-fluid" alt="Cover image">
+        </div>
+    {% endif %}
+    {% if design.floor_plan %}
+        <div class="col-md-6">
+            <a href="{{ design.floor_plan.url }}" class="btn btn-outline-primary">Download Floor Plan</a>
+        </div>
+    {% endif %}
+</div>
+<div class="mt-4">
+    <a class="btn btn-secondary" href="{% url 'designs:list' %}">Back to list</a>
+    <a class="btn btn-primary" href="{% url 'designs:update' design.pk %}">Edit</a>
+</div>
+{% endblock %}

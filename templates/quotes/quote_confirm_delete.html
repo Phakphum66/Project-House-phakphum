@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}ลบใบเสนอราคา{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="h4 mb-3">ยืนยันการลบใบเสนอราคา</h1>
+    <p>คุณต้องการลบใบเสนอราคาสำหรับแบบบ้าน <strong>{{ object.reference_name }}</strong> จริงหรือไม่?</p>
+        <p class="text-muted small mb-4">การลบครั้งนี้ไม่สามารถย้อนกลับได้ และข้อมูลที่เกี่ยวข้องกับใบเสนอราคานี้จะถูกลบออกจากระบบ.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">ลบใบเสนอราคา</button>
+                <a class="btn btn-outline-secondary" href="{% url 'quotes:detail' object.pk %}">ยกเลิก</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

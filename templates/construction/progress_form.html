@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Add Progress Update{% endblock %}
+{% block content %}
+<h1>Add Progress Update</h1>
+<p class="text-muted">Project: {{ project }}</p>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Update</button>
+    <a class="btn btn-secondary" href="{% url 'construction:detail' view.kwargs.project_pk %}">Cancel</a>
+</form>
+{% endblock %}

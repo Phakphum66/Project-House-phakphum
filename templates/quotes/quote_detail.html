@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}รายละเอียดใบเสนอราคา{% endblock %}
+{% block content %}
+<h1>รายละเอียดใบเสนอราคา</h1>
+<dl class="row">
+    <dt class="col-sm-3">แบบบ้าน</dt>
+    <dd class="col-sm-9">
+        <div class="fw-semibold">{{ quote.reference_name }}</div>
+        {% if quote.is_catalog_source %}
+            <span class="badge bg-primary-subtle text-primary mt-2">แบบบ้านแค็ตตาล็อก</span>
+        {% elif quote.design %}
+            <span class="badge bg-secondary-subtle text-secondary mt-2">แบบบ้านส่วนตัว</span>
+        {% endif %}
+        {% if quote.reference_description %}
+            <p class="text-muted mt-2 mb-0">{{ quote.reference_description|linebreaksbr }}</p>
+        {% endif %}
+    </dd>
+    <dt class="col-sm-3">รหัสอ้างอิง</dt>
+    <dd class="col-sm-9">{{ quote.reference_code }}</dd>
+    <dt class="col-sm-3">สถานะ</dt>
+    <dd class="col-sm-9">
+        {% if quote.status == 'approved' %}
+            อนุมัติแล้ว
+        {% elif quote.status == 'pending' %}
+            รอการตรวจสอบ
+        {% else %}
+            ฉบับร่าง
+        {% endif %}
+    </dd>
+    <dt class="col-sm-3">ราคา</dt>
+    <dd class="col-sm-9">
+        {% if quote.price %}
+            {{ quote.price|floatformat:2 }} บาท
+        {% else %}
+            รอตกลง
+        {% endif %}
+    </dd>
+    <dt class="col-sm-3">วันที่ขอใบเสนอราคา</dt>
+    <dd class="col-sm-9">{{ quote.created_at|date:"d M Y" }}</dd>
+    {% if quote.design and quote.design.owner %}
+        <dt class="col-sm-3">เจ้าของแบบบ้าน</dt>
+        <dd class="col-sm-9">{{ quote.design.owner.get_full_name|default:quote.design.owner.username }}</dd>
+    {% endif %}
+    {% if quote.catalog_design %}
+        <dt class="col-sm-3">ดูแบบบ้าน</dt>
+        <dd class="col-sm-9"><a class="btn btn-outline-primary btn-sm" href="{{ quote.catalog_design.get_absolute_url }}">เปิดดูแบบบ้านในแค็ตตาล็อก</a></dd>
+    {% endif %}
+</dl>
+{% if quote.design %}
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="h5 mb-3">ไฟล์แนบจากลูกค้า</h2>
+        <div class="row g-3 align-items-start">
+            {% if quote.design.cover_image %}
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="border rounded-3 overflow-hidden">
+                    <img src="{{ quote.design.cover_image.url }}" alt="ภาพหน้าปกแบบบ้าน"
+                         class="img-fluid w-100" style="object-fit: cover; max-height: 260px;">
+                </div>
+                <div class="small text-muted mt-2">รูปหน้าปกที่ลูกค้าแนบ</div>
+            </div>
+            {% endif %}
+            {% if quote.design.floor_plan %}
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="p-3 bg-light rounded-3 h-100 d-flex flex-column">
+                    <div class="fw-semibold mb-2">ไฟล์แปลน (Floor Plan)</div>
+                    <a class="btn btn-outline-primary btn-sm align-self-start" href="{{ quote.design.floor_plan.url }}" target="_blank" rel="noopener">
+                        ดาวน์โหลดไฟล์แปลน
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            {% if not quote.design.cover_image and not quote.design.floor_plan %}
+            <div class="col-12">
+                <div class="text-muted">ยังไม่มีไฟล์แนบจากลูกค้า</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+{% endif %}
+<a class="btn btn-secondary" href="{% url 'quotes:list' %}">กลับ</a>
+<a class="btn btn-outline-primary" href="{% url 'quotes:contract-pdf' quote_id=quote.pk %}" target="_blank" rel="noopener">
+    ดาวน์โหลดสัญญา (PDF)
+</a>
+{% if user.is_superuser %}
+    <a class="btn btn-primary" href="{% url 'quotes:update' quote.pk %}">ปรับปรุง</a>
+{% endif %}
+{% endblock %}

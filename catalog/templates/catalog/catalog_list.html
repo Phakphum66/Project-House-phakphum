@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}แค็ตตาล็อกแบบบ้าน{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <aside class="col-12 col-lg-4 col-xl-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 text-dark mb-3">ค้นหาแบบบ้าน</h2>
+                <form method="get" class="vstack gap-3">
+                    <div>
+                        <label for="search" class="form-label">คำค้นหา</label>
+                        <input id="search" class="form-control" type="text" name="q" value="{{ filters.q }}"
+                            placeholder="เช่น Modern Loft">
+                    </div>
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="price_min" class="form-label">ราคาขั้นต่ำ</label>
+                            <input id="price_min" class="form-control" type="number" name="price_min"
+                                value="{{ filters.price_min }}" min="0" step="100000">
+                        </div>
+                        <div class="col">
+                            <label for="price_max" class="form-label">ราคาสูงสุด</label>
+                            <input id="price_max" class="form-control" type="number" name="price_max"
+                                value="{{ filters.price_max }}" min="0" step="100000">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="area_min" class="form-label">พื้นที่ใช้สอยขั้นต่ำ</label>
+                            <input id="area_min" class="form-control" type="number" name="area_min"
+                                value="{{ filters.area_min }}" min="0" step="10">
+                        </div>
+                        <div class="col">
+                            <label for="area_max" class="form-label">พื้นที่ใช้สอยสูงสุด</label>
+                            <input id="area_max" class="form-control" type="number" name="area_max"
+                                value="{{ filters.area_max }}" min="0" step="10">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="bedrooms" class="form-label">จำนวนห้องนอน</label>
+                        <select id="bedrooms" class="form-select" name="bedrooms">
+                            <option value="">ทั้งหมด</option>
+                            {% for option in bedroom_options %}
+                            <option value="{{ option }}" {% if filters.bedrooms == option %}selected{% endif %}>ตั้งแต่ {{
+                                option }} ห้องนอนขึ้นไป</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sort" class="form-label">เรียงลำดับ</label>
+                        <select id="sort" class="form-select" name="sort">
+                            <option value="featured" {% if filters.sort == "featured" %}selected{% endif %}>แนะนำโดยทีมงาน
+                            </option>
+                            <option value="price_asc" {% if filters.sort == "price_asc" %}selected{% endif %}>ราคาต่ำไปสูง
+                            </option>
+                            <option value="price_desc" {% if filters.sort == "price_desc" %}selected{% endif %}>
+                                ราคาสูงไปต่ำ</option>
+                            <option value="popularity" {% if filters.sort == "popularity" %}selected{% endif %}>ความนิยม
+                            </option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary flex-fill" type="submit">กรองผลลัพธ์</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'catalog:list' %}">รีเซ็ต</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </aside>
+    <section class="col-12 col-lg-8 col-xl-9">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+            <div>
+                <h1 class="h3 mb-1">แค็ตตาล็อกแบบบ้านพร้อมสร้าง</h1>
+                <p class="text-muted mb-0">เลือกแบบบ้านที่ถูกใจ เพียงคลิกก็สามารถขอใบเสนอราคาได้ทันที</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                {% if filters.q %}
+                <span class="badge bg-primary-subtle text-primary">ผลลัพธ์สำหรับ "{{ filters.q }}"</span>
+                {% endif %}
+                {% if user.is_superuser %}
+                <a class="btn btn-primary" href="{% url 'catalog:create' %}">เพิ่มแบบบ้านในแค็ตตาล็อก</a>
+                {% endif %}
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="alert alert-info d-flex justify-content-between align-items-center shadow-sm">
+            <div>
+                มีแบบบ้านของคุณเองอยู่แล้วใช่ไหม? แนบไฟล์แบบแปลนและรายละเอียดเพื่อขอใบเสนอราคาได้ทันที
+            </div>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-primary" href="{% url 'designs:create' %}"><i
+                        class="bi bi-cloud-upload me-1"></i>แนบแบบบ้านของฉัน</a>
+                <a class="btn btn-primary" href="{% url 'quotes:create' %}"><i
+                        class="bi bi-file-earmark-plus me-1"></i>ขอใบเสนอราคา</a>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row g-4">
+            {% for design in designs %}
+            <div class="col-12">
+                <div class="card shadow-sm border-0 catalog-card">
+                    {# Remove badge header section to eliminate extra top spacing #}
+                    <div class="card-body">
+                        <h3 class="h5 text-dark">{{ design.name }}</h3>
+                        <p class="text-muted small mb-3">{{ design.concept|truncatewords:18 }}</p>
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                {% if design.cover_image %}
+                                <img src="{{ design.cover_image.url }}" alt="{{ design.name }}" class="catalog-thumb rounded">
+                                {% endif %}
+                                <div class="flex-grow-1">
+                                    <h3 class="h5 text-dark mb-1">{{ design.name }}</h3>
+                                    <p class="text-muted small mb-0">{{ design.concept|truncatewords:18 }}</p>
+                                </div>
+                            </div>
+                        <div class="mb-3">
+                            <div class="fw-semibold text-dark">เริ่มต้น {{ design.base_price|floatformat:0 }} บาท</div>
+                            <div class="text-muted small">พื้นที่ใช้สอย {{ design.area_sqm }} ตร.ม. • {{ design.bedrooms }} ห้องนอน • {{ design.bathrooms }} ห้องน้ำ</div>
+                        </div>
+                        <div>
+                            <div class="d-flex gap-2 {% if user.is_superuser %}mb-2{% endif %}">
+                                {% if design.slug %}
+                                <a class="btn btn-outline-primary flex-grow-1"
+                                    href="{% url 'catalog:design_detail' slug=design.slug %}">ดูรายละเอียด</a>
+                                {% else %}
+                                <a class="btn btn-outline-secondary flex-grow-1 disabled" tabindex="-1" aria-disabled="true">ดูรายละเอียด</a>
+                                {% endif %}
+                                {% if design.slug %}
+                                <form method="post" action="{% url 'catalog:get_quote' slug=design.slug %}"
+                                    class="flex-grow-1">
+                                    {% csrf_token %}
+                                    <button class="btn btn-primary w-100" type="submit">ขอใบเสนอราคา</button>
+                                </form>
+                                {% else %}
+                                <button class="btn btn-outline-secondary w-100 flex-grow-1" type="button" disabled tabindex="-1" aria-disabled="true">ขอใบเสนอราคา</button>
+                                {% endif %}
+                            </div>
+                            {% if user.is_superuser %}
+                            {% if design.slug %}
+                            <a href="{% url 'catalog:delete' slug=design.slug %}" class="btn btn-danger w-100 btn-sm">
+                                <i class="bi bi-trash me-1"></i>ลบแบบบ้าน
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-secondary w-100 btn-sm" type="button" disabled tabindex="-1" aria-disabled="true">
+                                <i class="bi bi-trash me-1"></i>ลบแบบบ้าน
+                            </button>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5 text-muted">
+                        ไม่พบแบบบ้านที่ตรงกับการค้นหา กรุณาปรับตัวกรองหรือคำค้นหาใหม่
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if is_paginated %}
+        <nav class="mt-4" aria-label="Catalog pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">ก่อนหน้า</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">ก่อนหน้า</span></li>
+                {% endif %}
+                {% for page in paginator.page_range %}
+                {% if page == page_obj.number %}
+                <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link"
+                        href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">ถัดไป</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">ถัดไป</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
